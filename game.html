@@ -12,14 +12,14 @@
       align-items: center;
       height: 100vh;
       margin: 0;
-      background-color: #87CEEB; /* Light Blue Background Color */
+      background-color: #87CEEB; 
     }
 
     #title {
       font-size: 24px;
       font-weight: bold;
       margin-bottom: 20px;
-      color: #333; /* Dark Grey Title Color */
+      color: #333; 
     }
 
     #game-container {
@@ -35,7 +35,7 @@
       font-size: 0;
       display: inline-block;
       cursor: pointer;
-      background-color: #3498db; /* Change card background color */
+      background-color: #3498db; 
     }
 
     .card img {
@@ -49,22 +49,22 @@
       padding: 10px 20px;
       font-size: 16px;
       cursor: pointer;
-      background-color: #2ecc71; /* Change button background color */
-      color: #fff; /* Change button text color */
+      background-color: #2ecc71; 
+      color: #fff;
       border: none;
       border-radius: 5px;
     }
 
     #message {
       margin-top: 10px;
-      color: #e74c3c; /* Change message text color */
+      color: #e74c3c; 
       font-weight: bold;
     }
 
     #score {
       margin-top: 10px;
       font-size: 18px;
-      color: #27ae60; /* Change score text color */
+      color: #27ae60; 
       font-weight: bold;
     }
   </style>
@@ -93,7 +93,7 @@
     card.className = 'card';
 
     const image = document.createElement('img');
-    image.src = `./cards/${letter}.png`;
+    image.src = `term-project/${letter}.png`;
     image.alt = letter;
 
     card.appendChild(image);
@@ -113,7 +113,7 @@
 
   function flipCard(card, letter) {
     flippedCards.push({ card, letter });
-    card.innerHTML = `<img src="./cards/${letter}.png" alt="${letter}">`;
+    card.innerHTML = `<img src="term-project/${letter}.png" alt="${letter}">`;
 
     if (flippedCards.length === word.length) {
       const isCorrect = flippedCards.every((obj, index) => obj.letter === word[index]);
