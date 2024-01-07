@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Memory Card Game</title>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #87CEEB; /* Light Blue Background Color */
+    }
+
+    #title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      color: #333; /* Dark Grey Title Color */
+    }
+
+    #game-container {
+      text-align: center;
+    }
+
+    .card {
+      width: 150px;
+      height: 150px;
+      border: 1px solid #000;
+      margin: 5px;
+      text-align: center;
+      font-size: 0;
+      display: inline-block;
+      cursor: pointer;
+      background-color: #3498db; /* Change card background color */
+    }
+
+    .card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    button {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: #2ecc71; /* Change button background color */
+      color: #fff; /* Change button text color */
+      border: none;
+      border-radius: 5px;
+    }
+
+    #message {
+      margin-top: 10px;
+      color: #e74c3c; /* Change message text color */
+      font-weight: bold;
+    }
+
+    #score {
+      margin-top: 10px;
+      font-size: 18px;
+      color: #27ae60; /* Change score text color */
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+<div id="title">Memory Game</div>
+<div id="game-container"></div>
+<button onclick="startGame()">Start Game</button>
+<button onclick="restartGame()">Restart Game</button>
+<div id="message"></div>
+<div id="score">Score: 0</div>
+
+
+<script>
+  const word = "bera";
+  let shuffledWord = shuffleArray([...new Set(word.split(''))]);
+  let flippedCards = [];
+  let matchedCards = [];
+  let score = 0;
+  let messageContainer = document.getElementById('message');
+  let scoreContainer = document.getElementById('score');
+
+  function createCard(letter) {
+    const card = document.createElement('div');
+    card.className = 'card';
+
+    const image = document.createElement('img');
+    image.src = `./cards/${letter}.png`;
+    image.alt = letter;
+
+    card.appendChild(image);
+
+    card.addEventListener('click', () => flipCard(card, letter));
+    return card;
+  }
+
+  function displayMessage(message) {
+    messageContainer.innerHTML = message;
+  }
+
+  function updateScore(points) {
+    score += points;
+    scoreContainer.innerHTML = `Score: ${score}`;
+  }
+
+  function flipCard(card, letter) {
+    flippedCards.push({ card, letter });
+    card.innerHTML = `<img src="./cards/${letter}.png" alt="${letter}">`;
+
+    if (flippedCards.length === word.length) {
+      const isCorrect = flippedCards.every((obj, index) => obj.letter === word[index]);
+      if (isCorrect) {
+        matchedCards.push(...flippedCards);
+        flippedCards = [];
+        updateScore(20 * word.length); // Give 20 points for each correct card
+        if (matchedCards.length === word.length) {
+          displayMessage('Congratulations! You guessed the correct order!');
+        }
+      } else {
+        displayMessage('Wrong guess, game over!');
+        setTimeout(() => {
+          startGame();
+        }, 2000);
+      }
+    } else if (flippedCards.length > word.length) {
+      displayMessage('Wrong guess, game over!');
+      setTimeout(() => {
+        startGame();
+      }, 2000);
+    }
+  }
+
+  function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  }
+
+  function startGame() {
+    shuffledWord = shuffleArray([...new Set(word.split(''))]);
+    flippedCards = [];
+    matchedCards = [];
+    score = 0;
+    messageContainer.innerHTML = '';
+    scoreContainer.innerHTML = 'Score: 0';
+
+    const gameContainer = document.getElementById('game-container');
+    gameContainer.innerHTML = '';
+
+    shuffledWord.forEach(letter => {
+      const card = createCard(letter);
+      gameContainer.appendChild(card);
+    });
+
+    setTimeout(() => {
+      const cards = document.querySelectorAll('.card');
+      cards.forEach(card => {
+        card.innerHTML = '';
+        card.style.backgroundColor = '#ccc';
+      });
+    }, 2000);
+  }
+
+  function restartGame() {
+    startGame();
+  }
+</script>
+
+</body>
+</html>
